@@ -74,6 +74,12 @@ Tutorials/
 │   ├── Storytelling/         # Audience, Narrative, Charts, Color, Dashboards, Ethics
 │   └── EDA_Coefficients.md   # Every coefficient + when/scenario
 │
+├── Ops/                      # All *-Ops disciplines
+│   ├── DevOps/, DevSecOps/, GitOps/, PlatformOps/
+│   ├── DataOps/, MLOps/, ModelOps/, LLMOps/
+│   ├── AIOps/, CVOps/, QAOps/
+│   └── FinOps/, SecOps/      # full README with scope, tools, metrics
+│
 ├── SystemDesign/             # Full system design curriculum
 │   ├── Fundamentals/
 │   ├── Networking/, Storage/, Databases/
