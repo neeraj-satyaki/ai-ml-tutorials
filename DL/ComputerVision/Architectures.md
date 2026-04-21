@@ -200,6 +200,148 @@ Diffusion Transformer (used in Sora, SD3, Flux).
 - **VideoMAE / VideoMAE v2** (2022-23).
 - **V-JEPA** (2024) — self-supervised video JEPA.
 
+## 14b. Low-Level & Image Restoration
+
+### Image Matting (alpha matte estimation)
+Decompose image I = αF + (1-α)B. Output: per-pixel alpha (soft transparency).
+Models:
+- **Deep Image Matting** (Xu 2017) — first CNN approach with trimap.
+- **IndexNet Matting** (2019), **GCA Matting** (2020).
+- **MODNet** (2020) — trimap-free portrait matting.
+- **RVM (Robust Video Matting)** (2021) — recurrent, real-time video.
+- **BackgroundMattingV2** (2020) — high-res background-based.
+- **VitMatte** (2023), **MatteFormer** — transformer-based.
+- **SAM + matting heads** (2024) — prompt-driven.
+
+### Background Removal
+Simpler subset of matting (binary mask or soft alpha).
+- **U2-Net** (2020), **MODNet**, **rembg** (lib wrapping U2-Net/BRIA-RMBG).
+- **BRIA RMBG-1.4/2.0** (2024), **BEN2** — SOTA commercial-grade.
+
+### Image Inpainting (fill missing regions)
+- **Context Encoders** (Pathak 2016), **DeepFillv2** (2019), **LaMa** (2022 — large mask).
+- **Stable Diffusion Inpainting**, **Flux Inpainting** (2024) — diffusion-based.
+- **ProPainter** (video inpainting).
+
+### Image Outpainting (extend beyond borders)
+- Diffusion-native (SDXL outpaint, Flux fill).
+- **Boundless** (2019) — early GAN work.
+
+### Super-Resolution (SR)
+- **SRCNN** (2014), **SRGAN** (2017), **ESRGAN** (2018), **Real-ESRGAN** (2021).
+- **SwinIR** (2021), **HAT** (2023), **SRResCGAN**.
+- **Diffusion SR** — SR3, StableSR, ResShift (2023).
+
+### Image Denoising
+- **DnCNN** (2017), **FFDNet**, **Noise2Noise** (unsupervised), **Noise2Void**.
+- **Restormer** (2022), **NAFNet** (2022) — strong SOTA transformers.
+
+### Image Deblurring (motion/defocus)
+- **DeepDeblur** (Nah 2017), **DeblurGAN**, **SRN-Deblur**.
+- **MPRNet**, **Restormer**, **NAFNet** — unified restoration.
+
+### Dehazing / Deraining / Desnowing
+- **AOD-Net** (dehaze), **DRDNet** (rain), **DesnowNet**.
+- **TransWeather** (2022), **WeatherDiffusion** (2024) — all-in-one.
+
+### Low-Light Enhancement
+- **Retinex-Net**, **Zero-DCE**, **EnlightenGAN**, **LLFormer** (2023).
+
+### Shadow Removal
+- **ST-CGAN** (2018), **DHAN**, **BMNet**, **ShadowDiffusion** (2023).
+
+### Reflection Removal
+- **ERRNet**, **IBCLN**, **YTMT-Net** (2021).
+
+### Image Harmonization (make composite look coherent)
+- **DoveNet** (2020), **iHarmony4**, **Harmonizer** (2022).
+
+### Relighting
+- **Relightable3D**, **SwitchLight** (2024), **DiLightNet** (2024 diffusion relighting).
+
+### Colorization
+- **DeOldify**, **InstColorization**, **BigColor** (2022), **Colorizer diffusion** (2024).
+
+### Style Transfer
+- **Gatys et al.** (2015) neural style, **AdaIN** (2017), **StyleBank**.
+- **Diffusion style transfer** — IP-Adapter, ControlNet ref.
+
+### Image-to-Image Translation
+- **Pix2Pix** (paired, 2017), **CycleGAN** (unpaired, 2017), **MUNIT**, **StarGAN v2**.
+- **Palette** (diffusion 2022), **InstructPix2Pix** (2023).
+
+### HDR / Tone Mapping
+- **HDRNet**, **Deep Reciprocating HDR**, **SingleHDR**.
+
+### Demosaicing (RAW -> RGB)
+- **Deep demosaicing** (Gharbi 2016), joint denoise + demosaic pipelines.
+
+### Learned Image Compression
+- **Ballé et al.** (end-to-end, 2017/2018), **Hific**, **HiFiC** (GAN-assisted 2020), **Cheng2020**, **ELIC**.
+
+---
+
+## 14c. Geometric / 3D Vision
+
+### Image Registration / Alignment
+- **DIRNet**, **VoxelMorph** (medical), **LoFTR** (2021 dense matching), **SuperGlue/SuperPoint**.
+
+### Stereo Matching
+- **GC-Net**, **PSMNet**, **RAFT-Stereo** (2021).
+
+### Camera Pose / Visual SLAM
+- **DROID-SLAM** (2021), **DSO**, **ORB-SLAM3**, **NICE-SLAM**, **Gaussian-SLAM** (2024).
+
+### Surface Normal Estimation
+- **OmniData**, **Marigold-Normal** (2024).
+
+### 3D Object Detection (LiDAR / multi-sensor)
+- **PointPillars**, **VoxelNet**, **CenterPoint**, **BEVFormer** (2022), **BEVFusion**.
+
+### Point Cloud Segmentation
+- **PointNet / PointNet++** (2017), **KPConv**, **Point Transformer v1/v2/v3**, **PTv3** (2024).
+
+### Multi-Object Tracking (MOT)
+- **SORT**, **DeepSORT**, **ByteTrack** (2022), **OC-SORT**, **StrongSORT**.
+- **MOTR / MOTRv2** — transformer-based end-to-end.
+
+### Lane Detection
+- **SCNN**, **LaneNet**, **LaneATT**, **CLRNet** (2022), **BEVLanes**.
+
+---
+
+## 14d. Understanding / Cross-Modal
+
+### Visual Grounding / Referring Expression Segmentation
+- **MAttNet**, **MDETR**, **GLIP / GroundingDINO** (2022-23).
+- **LISA** (2023) — LLM-driven segmentation reasoning.
+
+### VQA (Visual Question Answering)
+- **VQA v2 benchmark**, **LXMERT**, **BLIP / BLIP-2**, **LLaVA**, **GPT-4V**.
+
+### Scene Graph Generation
+- Detect objects + predict (subject, predicate, object) relationships.
+- **Neural Motifs**, **RelTR**, **EGTR** (2024).
+
+---
+
+## 14e. Trust / Safety / Content
+
+### Deepfake Detection / Forensics
+- **FaceForensics++**, **Xception-based detectors**, **FCD-Bench**, **CLIP-based forensics** (2024).
+
+### Watermarking / Steganography
+- **StegaStamp**, **RoSteALS**, **Stable Signature** (Meta 2023 diffusion watermarking).
+
+---
+
+## 14f. Applications
+
+### Virtual Try-On
+- **VITON**, **CP-VTON**, **TryOnDiffusion** (2023), **OOTDiffusion** (2024), **IDM-VTON** (2024).
+
+---
+
 ## 15. Visual-Language Multimodal (VLM) 2024-26
 
 - **CLIP** (2021), **SigLIP**, **SigLIP-2** (2024).
