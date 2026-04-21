@@ -74,6 +74,16 @@ Tutorials/
 │   ├── Storytelling/         # Audience, Narrative, Charts, Color, Dashboards, Ethics
 │   └── EDA_Coefficients.md   # Every coefficient + when/scenario
 │
+├── DesignPatterns/           # GoF + architectural + concurrency + cloud-native + anti-patterns
+├── DBMS/                     # Deep DB: theory, storage, query, txns, recovery, distributed
+├── ComputerArchitecture/     # ISA, pipelining, memory, parallelism, security
+├── OperatingSystems/         # Procs, sched, mem, FS, I/O, virt, security, RT
+├── NetworkSecurity/          # Layered + perimeter + crypto protocols + monitoring
+├── Cybersecurity/            # Full: offensive, defensive, forensics, IoT/OT, Web3, AI-sec + 26 case studies
+├── ElectronicsCommunication_Embedded/  # Digital logic, VLSI, DSP, comm, MCU, RTOS, sensors, IoT
+├── ProgrammingLanguages/     # Top langs + paradigms + advanced techniques (meta, SIMD, lock-free, GPU)
+├── Frontend/                 # HTML/CSS/JS/TS + frameworks + perf + a11y + sec + PWA + 3D + DS
+├── Backend/                  # Runtimes + APIs + data + messaging + auth + serverless + microservices
 ├── Ops/                      # All *-Ops disciplines
 │   ├── DevOps/, DevSecOps/, GitOps/, PlatformOps/
 │   ├── DataOps/, MLOps/, ModelOps/, LLMOps/
