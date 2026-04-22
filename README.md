@@ -84,6 +84,14 @@ Tutorials/
 ├── ProgrammingLanguages/     # Top langs + paradigms + advanced techniques (meta, SIMD, lock-free, GPU)
 ├── Frontend/                 # HTML/CSS/JS/TS + frameworks + perf + a11y + sec + PWA + 3D + DS
 ├── Backend/                  # Runtimes + APIs + data + messaging + auth + serverless + microservices
+├── NLP/                      # Fundamentals → LLM era → evals → frameworks → multilingual → code models → safety
+├── Robotics/                 # Kinematics, perception, SLAM, control, planning, manipulation, VLA, ROS 2
+├── HPC/                      # Parallelism, NCCL/MPI, accelerators, train/infer frameworks, clusters, profiling
+├── Mobile/                   # iOS, Android, cross-platform, on-device AI, perf/UX, security, release
+├── XR_ARVR/                  # 6DoF/SLAM, Quest/Vision Pro, engines, rendering, input, AI in XR, industry apps
+├── Blockchain_Web3/          # Fundamentals, consensus, Ethereum/rollups, other chains, DeFi, tooling, ZK
+├── Testing/                  # Unit → integration → E2E → property → fuzz → mutation → perf → sec → chaos → ML
+├── QuantumProgramming/       # SDKs, algorithms, error correction, hardware, compilers, simulation, apps
 ├── Ops/                      # All *-Ops disciplines
 │   ├── DevOps/, DevSecOps/, GitOps/, PlatformOps/
 │   ├── DataOps/, MLOps/, ModelOps/, LLMOps/
@@ -98,6 +106,9 @@ Tutorials/
 │   ├── Observability/, Scaling/, DevOps_Infra/
 │   ├── CaseStudies/          # 30+ real-world designs
 │   └── MLSystems/            # Feature stores → LLM serving
+│
+├── goku/                     # Claude coding agent — plans functionality from this repo
+│   └── Uses Anthropic API to build Domain→Concept→Chapter→Topic→Rule plans with Why at every node
 │
 └── _REFERENCE/               # Cross-cutting references
     ├── Activations_5Ws.md          # Sigmoid → SwiGLU — 5Ws each

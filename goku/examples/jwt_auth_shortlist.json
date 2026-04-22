@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "path": "Backend",
+      "relevance": 0.98,
+      "why": "Auth middleware, token issuance/verification, API layer all live here."
+    },
+    {
+      "path": "Cybersecurity",
+      "relevance": 0.95,
+      "why": "JWT pitfalls, cryptography, web security, and threat models belong here."
+    },
+    {
+      "path": "NetworkSecurity",
+      "relevance": 0.80,
+      "why": "TLS protocols, HSTS, perimeter controls that protect token transit."
+    },
+    {
+      "path": "Ops",
+      "relevance": 0.75,
+      "why": "Key rotation runbooks, observability, SLOs for auth failures."
+    },
+    {
+      "path": "SystemDesign",
+      "relevance": 0.65,
+      "why": "Stateless vs stateful tradeoffs, multi-region, failover."
+    },
+    {
+      "path": "DesignPatterns",
+      "relevance": 0.50,
+      "why": "Strategy + Chain-of-Responsibility + Adapter patterns for auth middleware."
+    }
+  ]
+}
