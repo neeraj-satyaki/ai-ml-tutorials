@@ -92,6 +92,16 @@ Tutorials/
 ├── Blockchain_Web3/          # Fundamentals, consensus, Ethereum/rollups, other chains, DeFi, tooling, ZK
 ├── Testing/                  # Unit → integration → E2E → property → fuzz → mutation → perf → sec → chaos → ML
 ├── QuantumProgramming/       # SDKs, algorithms, error correction, hardware, compilers, simulation, apps
+├── GameDev/                  # Unity / Unreal / Godot — rendering, physics, AI, netcode, platforms
+├── Bioinformatics/           # Sequencing, structural bio, omics, clinical, AI drug discovery
+├── QuantFinance/             # Market structure, strategies, modeling, HFT tech, ML trading, risk
+├── Compilers/                # Frontend, IR, optimization, backend, runtime, projects, references
+├── CompetitiveProgramming/   # DSA topics, contests, training, languages, tools
+├── ProductEngineeringManagement/  # PM + EM skills, process, strategy, communication
+├── Career_InterviewPrep/     # Ladder signals, DSA prep, sysdesign, behavioral, offers, resume
+├── Research/                 # Paper reading, reproducibility, experimentation, open science
+├── TechWriting_DevRel/       # Docs, blogging, talks, community, DevRel practice
+├── OpenSource_Contribution/  # First PR → maintainership → licensing → governance
 ├── Ops/                      # All *-Ops disciplines
 │   ├── DevOps/, DevSecOps/, GitOps/, PlatformOps/
 │   ├── DataOps/, MLOps/, ModelOps/, LLMOps/
@@ -115,7 +125,22 @@ Tutorials/
     ├── NeuralNet_Derivations.md    # One-iteration math per arch
     ├── Pseudocode_and_Flowcharts.md# All algos: pseudocode + mermaid flows
     ├── When_To_Use.md              # Scenario rules for every algorithm
-    └── sample_linear_regression.drawio # draw.io XML template
+    ├── sample_linear_regression.drawio # draw.io XML template
+    ├── Hyperparameter_Tuning.md    # Search algos, tooling, domain defaults
+    ├── Training_Optimization.md    # Optimizers, LR schedules, stability, distributed
+    ├── Model_Performance_Metrics.md# Metrics across ML/DL/CV/LLM
+    ├── Confusion_Matrix.md         # Binary + multiclass + imbalance + thresholds
+    ├── LLM_Evals.md                # Capability, preference, agent, safety, ops evals
+    ├── Prompt_Engineering_Patterns.md # Structural patterns, CoT family, guardrails
+    ├── Model_Compression.md        # Quantization, pruning, distillation, serving tricks
+    ├── RAPIDS.md                   # GPU-accelerated data science (cuDF, cuML, cuGraph)
+    ├── Rivermax.md                 # NVIDIA low-latency media + RoCE I/O
+    ├── Streaming_Frameworks.md     # GStreamer, DeepStream, DL Streamer, NNStreamer...
+    ├── ONNX.md                     # ONNX + Runtime + EPs + accessories
+    ├── Beginners_Project_Guide.md  # Robust/secure/reliable/scalable project planning
+    ├── build_pdf.py                # Script to build the PDF from the markdown source
+    ├── Beginners_Project_Guide.pdf # Rendered PDF version
+    └── CaseStudy_IdenticalBottles_MultiCamera.md # Tracking identical objects across N cams
 ```
 
 ## How to use
