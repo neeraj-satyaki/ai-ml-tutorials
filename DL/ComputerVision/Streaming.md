@@ -8,12 +8,17 @@ Everything specific to video streams vs single-image inference.
 - Keyframe detection, GOP structure, frame skipping strategies.
 
 ## 2. Inference pipelines
-- **NVIDIA Rivermax** — kernel-bypass SMPTE 2110 / RoCE ingest, NIC→GPU zero-copy. Sub-µs jitter. See `_REFERENCE/Rivermax.md`.
+See `_REFERENCE/Streaming_Frameworks.md` for a full comparison (GStreamer, DeepStream, DL Streamer, NNStreamer, VideoPipe, Pipeless, MediaStream, Holoscan).
+- **GStreamer** — foundation element-graph framework. Basis of everything below.
 - **NVIDIA DeepStream** + Triton Inference Server — GPU-accelerated, H.264/265 hw decode.
-- **NVIDIA Holoscan** — medical/edge streaming AI.
-- **Intel DL Streamer** (GStreamer plugins).
-- **OpenVINO** for Intel CPUs/iGPU.
-- **TensorRT-LLM** + **TensorRT** for model optimization.
+- **Intel DL Streamer** — GStreamer + OpenVINO for Intel CPU/iGPU/NPU.
+- **NNStreamer** — tensor-aware GStreamer plugins; mobile / consumer-electronics.
+- **VideoPipe** — lightweight C++ pipeline, GStreamer-free.
+- **Pipeless** — Rust core + Python stages for serverless CV.
+- **NVIDIA Holoscan** — medical/edge streaming AI; uses Rivermax + TensorRT.
+- **NVIDIA Rivermax** — kernel-bypass SMPTE 2110 / RoCE ingest, NIC→GPU zero-copy. Sub-µs jitter. See `_REFERENCE/Rivermax.md`.
+- **TensorRT-LLM** + **TensorRT** for model optimization (used under most of the above).
+- **MediaStream API** — browser-side capture; bridge to server pipelines via WebRTC.
 
 ## 3. Online / Streaming Algorithms
 - **Online object detection** — YOLO v8/v9/v10 on frames, tuned for FPS budget.
