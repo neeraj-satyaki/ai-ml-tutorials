@@ -1,0 +1,202 @@
+<mxfile host="app.diagrams.net" modified="2026-04-21T20:50:00.000Z" agent="Claude" version="24.5.0">
+  <diagram id="cnn-flow" name="CNN Processing an Image">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="How a CNN Processes an Image (224x224 RGB -&gt; 1000-class softmax)" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="300" y="10" width="1000" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============ INPUT IMAGE ============ -->
+        <mxCell id="img" value="Input image&#10;224 x 224 x 3 (RGB)&#10;normalized to [0,1]&#10;(subtract mean, divide std)" style="shape=image;html=1;verticalAlign=top;labelBackgroundColor=#ffffff;imageAlign=center;image=img/lib/clip_art/people/Man_128x128.png;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1" vertex="1" parent="1">
+          <mxGeometry x="60" y="70" width="160" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="imgLabel" value="Tensor shape: (B, 3, 224, 224)&#10;B = batch size" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="40" y="235" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============ STAGE 1: Conv1 + ReLU + Pool1 ============ -->
+        <mxCell id="conv1" value="Conv1&#10;64 filters, 3x3&#10;stride=1, pad=1&#10;weights: 64 x 3 x 3 x 3&#10;bias: 64&#10;out = W*x + b" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="conv1Shape" value="Out: (B, 64, 224, 224)" style="text;html=1;fontSize=10;fontStyle=2;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="280" y="205" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="relu1" value="ReLU&#10;max(0, x)&#10;elementwise" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="470" y="80" width="100" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pool1" value="MaxPool&#10;2x2, stride 2&#10;takes max in each 2x2 window" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="600" y="80" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="pool1Shape" value="Out: (B, 64, 112, 112)" style="text;html=1;fontSize=10;fontStyle=2;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="600" y="205" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ============ STAGE 2 ============ -->
+        <mxCell id="conv2" value="Conv2&#10;128 filters, 3x3&#10;stride=1, pad=1&#10;weights: 128 x 64 x 3 x 3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="790" y="80" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="conv2Shape" value="Out: (B, 128, 112, 112)" style="text;html=1;fontSize=10;fontStyle=2;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="790" y="205" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="relu2" value="ReLU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="980" y="80" width="70" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pool2" value="MaxPool 2x2 s2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="1080" y="80" width="150" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="pool2Shape" value="Out: (B, 128, 56, 56)" style="text;html=1;fontSize=10;fontStyle=2;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="1080" y="205" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ============ STAGE 3 ============ -->
+        <mxCell id="conv3" value="Conv3&#10;256 filters, 3x3, pad=1&#10;weights: 256 x 128 x 3 x 3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="280" y="290" width="160" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="conv3Shape" value="Out: (B, 256, 56, 56)" style="text;html=1;fontSize=10;fontStyle=2;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="280" y="405" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bn3" value="BatchNorm&#10;normalize per channel&#10;learn gamma, beta" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="470" y="290" width="140" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="relu3" value="ReLU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="640" y="290" width="80" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pool3" value="MaxPool 2x2 s2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="750" y="290" width="150" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="pool3Shape" value="Out: (B, 256, 28, 28)" style="text;html=1;fontSize=10;fontStyle=2;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="750" y="405" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ============ STAGE 4: classifier ============ -->
+        <mxCell id="gap" value="Global Avg Pool&#10;(or Flatten)&#10;28 x 28 per channel -&gt; 1&#10;reduces to (B, 256)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="950" y="290" width="170" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fc1" value="FC1&#10;Linear 256 -&gt; 512&#10;ReLU + Dropout 0.5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1">
+          <mxGeometry x="1160" y="290" width="170" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fc2" value="FC2 / Classifier&#10;Linear 512 -&gt; 1000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1">
+          <mxGeometry x="1160" y="430" width="170" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="softmax" value="Softmax&#10;p_i = exp(z_i) / Sum(exp(z))&#10;1000 class probs sum to 1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1">
+          <mxGeometry x="1160" y="540" width="170" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="label" value="argmax -&gt; predicted label&#10;e.g. 'golden retriever' (p = 0.82)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="1160" y="650" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ============ INSIDE A CONV KERNEL ============ -->
+        <mxCell id="zoomBand" value="Zoom: Inside one convolution (one output channel, one spatial location)" style="swimlane;html=1;startSize=28;fillColor=#fafafa;strokeColor=#a0a0a0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="60" y="470" width="1080" height="340" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zImg" value="Input patch (C x 3 x 3)&#10;receptive field at current (y, x)&#10;for RGB input: 3 x 3 x 3 = 27 values" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="zoomBand">
+          <mxGeometry x="20" y="50" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zK" value="Kernel / filter W&#10;(C x 3 x 3) learned weights&#10;+ scalar bias b" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="zoomBand">
+          <mxGeometry x="280" y="50" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zOp" value="Elementwise multiply&#10;then sum (dot product)&#10;z = Sum_i ( W_i * x_i ) + b" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="zoomBand">
+          <mxGeometry x="540" y="50" width="240" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zAct" value="Activation&#10;a = ReLU(z)&#10;one scalar at (y, x) in&#10;one output channel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="zoomBand">
+          <mxGeometry x="820" y="50" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zSlide" value="Slide kernel across H x W -&gt; produce full feature map&#10;Repeat for each of the K output channels&#10;Output tensor: (B, K, H_out, W_out)&#10;H_out = floor((H + 2p - k) / s) + 1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce5cd;strokeColor=#b85450" vertex="1" parent="zoomBand">
+          <mxGeometry x="20" y="190" width="1020" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- ============ LEGEND / KEY FORMULAS ============ -->
+        <mxCell id="legendBand" value="Key formulas + shape intuition" style="swimlane;html=1;startSize=28;fillColor=#fafafa;strokeColor=#a0a0a0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="60" y="830" width="1080" height="260" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f_out" value="Conv output size&#10;H_out = floor((H_in + 2*pad - kernel) / stride) + 1&#10;same for W_out&#10;channels out = number of filters K" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf" vertex="1" parent="legendBand">
+          <mxGeometry x="20" y="50" width="320" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f_params" value="Params per conv layer&#10;#weights = K * C_in * k_h * k_w&#10;#biases  = K&#10;Example conv1: 64*3*3*3 = 1728 + 64 = 1792" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366" vertex="1" parent="legendBand">
+          <mxGeometry x="360" y="50" width="340" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f_rf" value="Receptive field grows with depth&#10;each new 3x3 conv adds 2 to RF&#10;plus pooling multiplies spatial stride&#10;deep layers see whole image" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00" vertex="1" parent="legendBand">
+          <mxGeometry x="720" y="50" width="340" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f_flow" value="What CNN learns&#10; - early layers: edges, colors, textures&#10; - mid: parts (eyes, wheels, corners)&#10; - late: object-level concepts&#10; - final FC: mapping to classes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6" vertex="1" parent="legendBand">
+          <mxGeometry x="20" y="150" width="500" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f_train" value="Training&#10;loss = CrossEntropy(softmax_out, target)&#10;backprop: dL/dW via chain rule over all layers&#10;update: W = W - lr * dL/dW (AdamW etc.)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450" vertex="1" parent="legendBand">
+          <mxGeometry x="540" y="150" width="520" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- =========== ARROWS =========== -->
+        <!-- Row 1: image -> conv1 -> relu1 -> pool1 -> conv2 -> relu2 -> pool2 -->
+        <mxCell id="a1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="img" target="conv1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a2" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="conv1" target="relu1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a3" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="relu1" target="pool1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a4" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="pool1" target="conv2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a5" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="conv2" target="relu2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a6" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="relu2" target="pool2"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- pool2 -> conv3 (drop to next row) -->
+        <mxCell id="a7" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="pool2" target="conv3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="250" />
+              <mxPoint x="240" y="250" />
+              <mxPoint x="240" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Row 2: conv3 -> bn3 -> relu3 -> pool3 -> gap -> fc1 -->
+        <mxCell id="a8" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="conv3" target="bn3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a9" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="bn3" target="relu3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a10" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="relu3" target="pool3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a11" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="pool3" target="gap"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a12" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="gap" target="fc1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- classifier column vertical -->
+        <mxCell id="a13" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="fc1" target="fc2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a14" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="fc2" target="softmax"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a15" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="softmax" target="label"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Zoom detail arrows -->
+        <mxCell id="z1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="zImg" target="zOp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="z2" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="zK" target="zOp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="z3" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="zOp" target="zAct"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- Zoom explainer from conv1 to zoom band -->
+        <mxCell id="zoomLink" value="zoom in" style="endArrow=classic;html=1;strokeColor=#b85450;dashed=1;strokeWidth=2;fontSize=10" edge="1" parent="1" source="conv1" target="zoomBand">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
