@@ -1,0 +1,214 @@
+<mxfile host="app.diagrams.net" modified="2026-04-21T20:40:00.000Z" agent="Claude" version="24.5.0">
+  <diagram id="pkt-life" name="Life of a Packet - 'Hi, How are ?'">
+    <mxGraphModel dx="1600" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="Life of a Network Packet Carrying 'Hi, How are ?'" style="text;html=1;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="480" y="10" width="700" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ================= SENDER SIDE (left column) ================= -->
+        <mxCell id="senderBand" value="SENDER (client browser / phone)" style="swimlane;html=1;startSize=30;fillColor=#f5f5f5;strokeColor=#808080;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="380" height="1070" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s_app" value="App Layer&#10;JS: socket.send('Hi, How are ?')&#10;14 UTF-8 bytes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="50" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_ws" value="WebSocket frame&#10;FIN=1, opcode=0x1 (text)&#10;mask bit=1, 4B mask key, payload=14B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="120" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_tls" value="TLS 1.3 record (type=23)&#10;AES-128-GCM encrypt + 16B auth tag&#10;per-record nonce from sequence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="senderBand" parent="senderBand">
+          <mxGeometry x="30" y="190" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_sys" value="syscall write(fd, buf, 41)&#10;user -&gt; kernel mode switch&#10;append to sk_write_queue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="260" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_tcp" value="TCP output&#10;seq, ack, PSH+ACK flags&#10;window (scaled), TS option, SACK&#10;cwnd check (BBR/CUBIC) -&gt; send&#10;checksum over pseudo+payload" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="330" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="s_ip" value="IP layer (IPv4/IPv6)&#10;src=192.168.1.42, dst=203.0.113.10&#10;TTL=64, DF=1, proto=6&#10;header checksum" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="430" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="s_route" value="Routing + ARP/NDP&#10;FIB lookup -&gt; gateway 192.168.1.1&#10;ARP cache -&gt; dst MAC aa:bb:...:01" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="520" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_eth" value="Ethernet header&#10;src MAC, dst MAC, EtherType=0x0800&#10;optional 802.1Q VLAN tag" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#b85450" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="590" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_nf" value="Netfilter hooks / conntrack&#10;iptables OUTPUT -&gt; POSTROUTING&#10;SNAT src IP -&gt; public IP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#b85450" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="660" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s_qdisc" value="tc qdisc (fq_codel / fq pacing)&#10;scheduling, pacing, AQM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#b85450" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="730" width="320" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="s_nic" value="NIC driver + DMA&#10;TX ring descriptor, doorbell MMIO&#10;optional TSO/GSO + checksum offload&#10;NIC appends Ethernet FCS (CRC32)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c5e1a5;strokeColor=#558b2f" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="790" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="s_phy" value="PHY + wire&#10;MAC -&gt; PHY -&gt; SerDes&#10;NRZ/PAM4 encoding, 64b/66b, scramble&#10;copper pulse or fiber photons" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c5e1a5;strokeColor=#558b2f" vertex="1" parent="senderBand">
+          <mxGeometry x="30" y="880" width="320" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ================= TRANSIT (middle column) ================= -->
+        <mxCell id="netBand" value="NETWORK TRANSIT (ISPs, IX, DC fabric)" style="swimlane;html=1;startSize=30;fillColor=#f5f5f5;strokeColor=#808080;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="450" y="50" width="380" height="1070" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_home" value="Home switch / router&#10;L2 MAC lookup, forward to WAN&#10;PPPoE/DHCP-WAN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="50" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n_access" value="Access network&#10;DOCSIS 3.1 / GPON / FTTH / 5G&#10;GEM frames, ONU demux at OLT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="120" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n_edge" value="ISP edge router&#10;LPM lookup, TTL--, checksum update&#10;MPLS label push, BGP chose path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="190" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n_core" value="Backbone hops (8-20 routers)&#10;Hardware TCAM FIB lookup&#10;DWDM long haul 400G/800G coherent&#10;amplifier every 80 km, maybe submarine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="260" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="n_ix" value="Internet Exchange / peering&#10;DE-CIX / AMS-IX / LINX&#10;BGP AS-path, local-pref, MED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="350" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n_destisp" value="Destination ISP POP&#10;anycast steering to nearest POP&#10;MPLS pop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="420" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dc" value="Datacenter fabric&#10;leaf-spine CLOS, ECMP 5-tuple hash&#10;DDoS scrubber + WAF + L7 LB&#10;HAProxy / Envoy / ALB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="490" width="320" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Event / what can happen -->
+        <mxCell id="evt" value="Events along the way" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="585" width="320" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="e_loss" value="Loss -&gt; sender RTO / 3 dup ACKs -&gt; fast retransmit. cwnd halves." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="610" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e_reorder" value="Reorder -&gt; receiver SACK, sender holds off." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="660" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ecn" value="ECN-CE mark -&gt; ECE in ACK -&gt; reduce cwnd (no loss)." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="700" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e_mtu" value="MTU mismatch + DF=1 -&gt; ICMP Frag Needed. PMTU cache update + resend." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="740" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ttl" value="TTL=0 -&gt; ICMP Time Exceeded back to sender (traceroute mechanism)." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="790" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e_cdn" value="CDN / proxy intercept (Cloudflare/Fastly). TLS terminated at edge, re-established to origin." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="830" width="320" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e_quic" value="QUIC variant: all L4+TLS in UDP. 0-RTT resume. No separate SYN." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="890" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e_drop" value="NIC rx drop (no buffer) -&gt; counted only in ethtool -S. Packet never saw kernel." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="netBand">
+          <mxGeometry x="30" y="940" width="320" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ================= RECEIVER SIDE (right column) ================= -->
+        <mxCell id="rcvBand" value="RECEIVER (chat server, then fan-out)" style="swimlane;html=1;startSize=30;fillColor=#f5f5f5;strokeColor=#808080;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="860" y="50" width="380" height="1070" as="geometry" />
+        </mxCell>
+
+        <mxCell id="r_phy" value="Server PHY -&gt; MAC&#10;CRC check, link header strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c5e1a5;strokeColor=#558b2f" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="50" width="320" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r_nic" value="NIC RX -&gt; DMA -&gt; RX ring&#10;GRO coalesce, RSS hash -&gt; core queue&#10;MSI-X interrupt -&gt; softirq NET_RX" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c5e1a5;strokeColor=#558b2f" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="110" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="r_netfilter" value="Netfilter PREROUTING / INPUT&#10;conntrack reverse lookup -&gt; DNAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#b85450" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="200" width="320" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ip" value="IP layer&#10;validate checksum, TTL&#10;handoff to proto=6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="260" width="320" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="r_tcp" value="TCP receive tcp_v4_rcv()&#10;validate seq in window&#10;enqueue to socket, schedule ACK&#10;update rwnd, send ACK back" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="320" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="r_sys" value="App reads socket (epoll/kqueue/io_uring)&#10;kernel -&gt; user copy, wakes handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="410" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="r_tls" value="TLS 1.3 decrypt&#10;AES-128-GCM with sequence-derived nonce&#10;verify 16B auth tag&#10;mismatch -&gt; TLS alert + tear down" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="480" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ws" value="WebSocket parser&#10;unmask with client XOR key&#10;opcode=text -&gt; UTF-8 payload" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="570" width="320" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="r_handler" value="App handler receives &quot;Hi, How are ?&quot;&#10;auth check (JWT)&#10;persist to DB (Postgres / Scylla)&#10;publish via Redis / NATS / Kafka" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="650" width="320" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="r_fanout" value="Fan-out to recipient WS connections&#10;each path mirrors this journey back" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="740" width="320" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ack" value="Meanwhile: TCP ACK travels reverse path.&#10;Sender RTT sample updated&#10;BBR/CUBIC grows cwnd" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="810" width="320" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="r_render" value="Recipient client&#10;TLS decrypt -&gt; WS parse -&gt; onmessage&#10;DOM update -&gt; pixel on screen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="rcvBand">
+          <mxGeometry x="30" y="890" width="320" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ================= ARROWS between bands ================= -->
+        <!-- sender internal flow: app -> ws -> tls -> sys -> tcp -> ip -> route -> eth -> nf -> qdisc -> nic -> phy -->
+        <mxCell id="f1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_app" target="s_ws"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f2" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_ws" target="s_tls"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f3" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_tls" target="s_sys"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f4" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_sys" target="s_tcp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f5" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_tcp" target="s_ip"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f6" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_ip" target="s_route"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f7" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_route" target="s_eth"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f8" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_eth" target="s_nf"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f9" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_nf" target="s_qdisc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f10" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_qdisc" target="s_nic"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f11" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="s_nic" target="s_phy"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- sender PHY -> network home -->
+        <mxCell id="c1" value="bits on wire/fiber" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;fontSize=10" edge="1" parent="1" source="s_phy" target="n_home"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- network flow -->
+        <mxCell id="n1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="n_home" target="n_access"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n2" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="n_access" target="n_edge"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n3" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="n_edge" target="n_core"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n4" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="n_core" target="n_ix"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n5" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="n_ix" target="n_destisp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n6" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="n_destisp" target="n_dc"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- network DC fabric -> server PHY -->
+        <mxCell id="c2" value="bits into server" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=2;fontSize=10" edge="1" parent="1" source="n_dc" target="r_phy"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- receiver flow -->
+        <mxCell id="r1" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_phy" target="r_nic"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r2" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_nic" target="r_netfilter"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r3" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_netfilter" target="r_ip"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r4" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_ip" target="r_tcp"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r5" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_tcp" target="r_sys"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r6" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_sys" target="r_tls"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r7" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_tls" target="r_ws"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r8" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_ws" target="r_handler"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r9" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_handler" target="r_fanout"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r10" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_fanout" target="r_ack"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r11" style="endArrow=classic;html=1;strokeColor=#444;strokeWidth=1.5" edge="1" parent="1" source="r_ack" target="r_render"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ACK reverse dashed arrow -->
+        <mxCell id="ackArrow" value="TCP ACK reverse path" style="endArrow=classic;html=1;strokeColor=#6c8ebf;dashed=1;strokeWidth=2;fontSize=10" edge="1" parent="1" source="r_tcp" target="s_tcp">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="470" />
+              <mxPoint x="1260" y="1050" />
+              <mxPoint x="20" y="1050" />
+              <mxPoint x="20" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="Legend: app (blue), TLS (purple), TCP (green), IP (orange), link/NIC (red/olive), wire/PHY (olive), transit (yellow), events (pink), ACK (dashed blue)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;strokeColor=none" vertex="1" parent="1">
+          <mxGeometry x="40" y="1130" width="1200" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
