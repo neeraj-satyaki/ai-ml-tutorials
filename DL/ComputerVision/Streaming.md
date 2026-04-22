@@ -8,6 +8,7 @@ Everything specific to video streams vs single-image inference.
 - Keyframe detection, GOP structure, frame skipping strategies.
 
 ## 2. Inference pipelines
+- **NVIDIA Rivermax** — kernel-bypass SMPTE 2110 / RoCE ingest, NIC→GPU zero-copy. Sub-µs jitter. See `_REFERENCE/Rivermax.md`.
 - **NVIDIA DeepStream** + Triton Inference Server — GPU-accelerated, H.264/265 hw decode.
 - **NVIDIA Holoscan** — medical/edge streaming AI.
 - **Intel DL Streamer** (GStreamer plugins).

@@ -33,6 +33,7 @@ How a real DS project flows.
 - **dbt** — SQL-based transformation + testing + lineage.
 - **Airflow** — DAG-based workflow orchestration.
 - **Tableau / PowerBI** — BI dashboards, drag-drop viz, data source connectors.
+- **RAPIDS** (cuDF, cuML, cuGraph, cuSpatial, cuSignal, Dask-CUDA) — GPU-accelerated pandas/sklearn/NetworkX, 10-100x speedups. See `_REFERENCE/RAPIDS.md`.
 
 ## Storytelling — `Storytelling/`
 How to present data so people act on it.
